@@ -20,6 +20,7 @@ func AllRobots(w http.ResponseWriter, req *http.Request) {
 
 	r, err := models.AllRobots()
 	if err != nil {
+		fmt.Println(err)
 		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
 		return
 	}
