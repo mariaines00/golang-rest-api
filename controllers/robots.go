@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"../config"
+	"../models"
 )
 
 // Hello will just list all the existing endpoint and something else
@@ -16,7 +17,14 @@ func Hello(w http.ResponseWriter, req *http.Request) {
 // AllRobots displays all robots
 func AllRobots(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
-	fmt.Fprint(w, "<h1>AllRobots</h1>")
+
+	r, err := models.AllRobots()
+	if err != nil {
+		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
+		return
+	}
+
+	fmt.Fprint(w, "<h1>AllRobots</h1>", r)
 }
 
 // CreateRobot creates a new robot
