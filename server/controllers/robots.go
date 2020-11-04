@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"database/sql"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"time"
@@ -16,7 +18,7 @@ func Hello(w http.ResponseWriter, req *http.Request) {
 
 // AllRobots displays all robots
 func AllRobots(w http.ResponseWriter, req *http.Request) {
-	w.Header().Set("Content-Type", "text/html")
+	w.Header().Set("Content-Type", "application/json")
 
 	r, err := models.AllRobots()
 	if err != nil {
@@ -25,29 +27,70 @@ func AllRobots(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	fmt.Fprint(w, "<h1>AllRobots</h1>", r)
-}
-
-// CreateRobot creates a new robot
-func CreateRobot(w http.ResponseWriter, req *http.Request) {
-	w.Header().Set("Content-Type", "text/html")
-	fmt.Fprint(w, "<h1>CreateRobot</h1>")
+	j, _ := json.Marshal(r)
+	w.Write(j)
 }
 
 // OneRobot shows info about a single robot
 func OneRobot(w http.ResponseWriter, req *http.Request) {
-	w.Header().Set("Content-Type", "text/html")
-	fmt.Fprint(w, "<h1>OneRobot</h1>")
+	w.Header().Set("Content-Type", "application/json")
+
+	r, err := models.OneRobot(req)
+	switch {
+	case err == sql.ErrNoRows:
+		http.NotFound(w, req)
+		return
+	case err != nil:
+		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
+		return
+	}
+
+	j, _ := json.Marshal(r)
+	w.Write(j)
+}
+
+// CreateRobot creates a new robot
+func CreateRobot(w http.ResponseWriter, req *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	r, err := models.CreateRobot(req)
+	if err != nil {
+		fmt.Println(err)
+		http.Error(w, http.StatusText(406), http.StatusNotAcceptable)
+		return
+	}
+
+	j, _ := json.Marshal(r)
+	w.Write(j)
 }
 
 // UpdateRobot updates information on a robot
 func UpdateRobot(w http.ResponseWriter, req *http.Request) {
-	w.Header().Set("Content-Type", "text/html")
-	fmt.Fprint(w, "<h1>UpdateRobot</h1>")
+	w.Header().Set("Content-Type", "application/json")
+
+	r, err := models.UpdateRobot(req)
+	if err != nil {
+		fmt.Println(err)
+		http.Error(w, http.StatusText(406), http.StatusBadRequest)
+		return
+	}
+
+	j, _ := json.Marshal(r)
+	w.Write(j)
 }
 
 // RemoveRobot removes a robot
 func RemoveRobot(w http.ResponseWriter, req *http.Request) {
-	w.Header().Set("Content-Type", "text/html")
-	fmt.Fprint(w, "<h1>RemoveRobot</h1>")
+	w.Header().Set("Content-Type", "application/json")
+
+	err := models.RemoveRobot(req)
+	if err != nil {
+		fmt.Println(err)
+		http.Error(w, http.StatusText(400), http.StatusBadRequest)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
 }
+
+//TODO: error handler
