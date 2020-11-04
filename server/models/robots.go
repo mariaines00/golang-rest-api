@@ -12,6 +12,7 @@ import (
 
 // Robot struct
 type Robot struct {
+	ID      string   `json:"-"`
 	Name    string   `json:"name"`
 	Model   float32  `json:"model"`
 	Buddies []string `json:"buddies"`
@@ -29,7 +30,7 @@ func AllRobots() ([]Robot, error) {
 	b := make([]Robot, 0)
 	for rows.Next() {
 		bot := Robot{}
-		err := rows.Scan(&bot.Name, &bot.Model)
+		err := rows.Scan(&bot.ID, &bot.Name, &bot.Model)
 		if err != nil {
 			return nil, err
 		}
@@ -42,17 +43,17 @@ func AllRobots() ([]Robot, error) {
 
 }
 
-// OneRobot returns a single robot given the ID
+// OneRobot returns a single robot given the Name
 func OneRobot(req *http.Request) (Robot, error) {
 	bot := Robot{}
 
-	id := mux.Vars(req)["id"]
-	if id == "" {
+	name := mux.Vars(req)["name"]
+	if name == "" {
 		return bot, errors.New("400. Bad Request")
 	}
 
-	row := config.DB.QueryRow("SELECT * FROM robots WHERE id = $1", id)
-	err := row.Scan(&bot.Name, &bot.Model)
+	row := config.DB.QueryRow("SELECT * FROM robots WHERE name = $1", name)
+	err := row.Scan(&bot.ID, &bot.Name, &bot.Model)
 	if err != nil {
 		return bot, err
 	}
@@ -83,12 +84,12 @@ func CreateRobot(req *http.Request) (Robot, error) {
 	return bot, nil
 }
 
-// UpdateRobot updates data about a single robot given the ID
+// UpdateRobot updates data about a single robot given the Name
 func UpdateRobot(req *http.Request) (Robot, error) {
 	bot := Robot{}
 
-	id := mux.Vars(req)["id"]
-	if id == "" {
+	oldName := mux.Vars(req)["name"]
+	if oldName == "" {
 		return bot, errors.New("400. Bad Request")
 	}
 
@@ -103,7 +104,7 @@ func UpdateRobot(req *http.Request) (Robot, error) {
 	}
 
 	// insert values
-	_, err = config.DB.Exec("UPDATE robots SET name = $2, model=$3 WHERE id=$1;", id, bot.Name, bot.Model)
+	_, err = config.DB.Exec("UPDATE robots SET name = $2, model=$3 WHERE name=$1;", oldName, bot.Name, bot.Model)
 	if err != nil {
 		return bot, err
 	}
@@ -111,14 +112,14 @@ func UpdateRobot(req *http.Request) (Robot, error) {
 	return bot, nil
 }
 
-// RemoveRobot removes a single robot given the ID
+// RemoveRobot removes a single robot given the Name
 func RemoveRobot(req *http.Request) error {
-	id := mux.Vars(req)["id"]
-	if id == "" {
+	name := mux.Vars(req)["name"]
+	if name == "" {
 		return errors.New("400. Bad Request")
 	}
 
-	_, err := config.DB.Exec("DELETE FROM robots WHERE id=$1;", id)
+	_, err := config.DB.Exec("DELETE FROM robots WHERE name=$1;", name)
 	if err != nil {
 		return errors.New("500. Internal Server Error")
 	}
@@ -162,7 +163,7 @@ func getRobotByName(name string) (Robot, error) {
 	bot := Robot{}
 	row := config.DB.QueryRow("SELECT * FROM robots WHERE name = $1", name)
 
-	err := row.Scan(&bot.Name, &bot.Model, []string{})
+	err := row.Scan(&bot.ID, &bot.Name, &bot.Model)
 	if err != nil {
 		return bot, err
 	}

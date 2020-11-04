@@ -19,18 +19,18 @@ func main() {
 	r.HandleFunc("/robots", controllers.AllRobots).Methods("GET")
 	r.HandleFunc("/robots", controllers.CreateRobot).Methods("POST")
 
-	r.HandleFunc("/robots/{id}", controllers.OneRobot).Methods("GET")
-	r.HandleFunc("/robots/{id}", controllers.UpdateRobot).Methods("PUT")
-	r.HandleFunc("/robots/{id}", controllers.RemoveRobot).Methods("DELETE")
+	r.HandleFunc("/robots/{name}", controllers.OneRobot).Methods("GET")
+	r.HandleFunc("/robots/{name}", controllers.UpdateRobot).Methods("PUT")
+	r.HandleFunc("/robots/{name}", controllers.RemoveRobot).Methods("DELETE")
 
 	fmt.Println("Server started at port 8080")
 	log.Fatal(http.ListenAndServe(":8080", r))
 
 	//TODO:
 	/*
-		r.HandleFunc("/robots/{id}/buddies", controllers.).Methods("GET")
-		r.HandleFunc("/robots/{id}/buddies", controllers.).Methods("PUT")
-		r.HandleFunc("/robots/{id}/buddies", controllers.).Methods("DELETE")
+		r.HandleFunc("/robots/{name}/buddies", controllers.).Methods("GET")
+		r.HandleFunc("/robots/{name}/buddies", controllers.).Methods("PUT")
+		r.HandleFunc("/robots/{name}/buddies", controllers.).Methods("DELETE")
 	*/
 	// r.Use(loggingMiddleware)
 	// graceful shutdown
