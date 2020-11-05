@@ -149,8 +149,8 @@ func parseRobotRequestValues(req *http.Request) (Robot, error) {
 	return bot, nil
 }
 
-// parseRobotName returns the name string from the request
-func parseRobotName(req *http.Request) (string, error) {
+// ParseRobotName returns the name string from the request
+func ParseRobotName(req *http.Request) (string, error) {
 	name := mux.Vars(req)["name"]
 	if name == "" {
 		return "", errors.New("400. Bad Request")
@@ -158,8 +158,8 @@ func parseRobotName(req *http.Request) (string, error) {
 	return name, nil
 }
 
-// getRobotByName is an helper function
-func getRobotByName(name string) (Robot, error) {
+// GetRobotByName is an helper function
+func GetRobotByName(name string) (Robot, error) {
 	bot := Robot{}
 	row := config.DB.QueryRow("SELECT * FROM robots WHERE name = $1", name)
 
