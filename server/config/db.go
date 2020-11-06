@@ -12,7 +12,7 @@ var DB *sql.DB
 
 func init() {
 	var err error
-	DB, err = sql.Open("postgres", "postgres://asimov:password@localhost/factory?sslmode=disable")
+	DB, err = sql.Open("postgres", "postgres://asimov:password@database/factory?sslmode=disable")
 	if err != nil {
 		panic(err)
 	}

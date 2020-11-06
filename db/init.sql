@@ -1,4 +1,3 @@
-CREATE DATABASE IF NOT EXISTS factory;
 
 CREATE USER asimov PASSWORD 'password';
 
