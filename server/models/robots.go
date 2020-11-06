@@ -6,8 +6,9 @@ import (
 	"net/http"
 	"strconv"
 
-	"../config"
 	"github.com/gorilla/mux"
+
+	"github.com/mariaines00/golang-rest-api/config"
 )
 
 // Robot struct

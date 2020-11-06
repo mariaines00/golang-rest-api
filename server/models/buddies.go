@@ -4,8 +4,9 @@ import (
 	"errors"
 	"net/http"
 
-	"../config"
 	"github.com/gorilla/mux"
+
+	"github.com/mariaines00/golang-rest-api/config"
 )
 
 // AllBuddies displays all the buddies for a single robot

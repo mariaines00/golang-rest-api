@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"../models"
+	"github.com/mariaines00/golang-rest-api/models"
 )
 
 // AllBuddies displays all the buddies for a single robot
