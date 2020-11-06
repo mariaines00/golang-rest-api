@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	"./controllers"
+	"github.com/mariaines00/golang-rest-api/controllers"
 
 	"github.com/gorilla/mux"
 )

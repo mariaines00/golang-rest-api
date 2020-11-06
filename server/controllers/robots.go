@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"time"
 
-	"../config"
-	"../models"
+	"github.com/mariaines00/golang-rest-api/config"
+	"github.com/mariaines00/golang-rest-api/models"
 )
 
 // Hello will just list all the existing endpoint and something else
