@@ -13,10 +13,10 @@ import (
 
 // Robot struct
 type Robot struct {
-	ID      string   `json:"-"`
-	Name    string   `json:"name"`
-	Model   float32  `json:"model"`
-	Buddies []string `json:"buddies"`
+	ID    string  `json:"-"`
+	Name  string  `json:"name"`
+	Model float32 `json:"model"`
+	//Buddies []string `json:"buddies"`
 }
 
 // AllRobots returns all the robots
@@ -124,8 +124,8 @@ func RemoveRobot(req *http.Request) error {
 	if err != nil {
 		return errors.New("500. Internal Server Error")
 	}
-	return nil
 
+	return nil
 }
 
 // parseRobotRequestValues will look at the form and return an Robot struct

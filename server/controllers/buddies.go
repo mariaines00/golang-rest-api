@@ -25,12 +25,24 @@ func AllBuddies(w http.ResponseWriter, req *http.Request) {
 
 // AddBuddy adds a single new buddy to the robot buddies list
 func AddBuddy(w http.ResponseWriter, req *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
+	err := models.AddBuddy(req)
+	if err != nil {
+		fmt.Println(err)
+		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
+		return
+	}
 
+	w.WriteHeader(http.StatusOK)
 }
 
 // RemoveBuddy removes a single buddy from the buddies list
 func RemoveBuddy(w http.ResponseWriter, req *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
+	err := models.RemoveBuddy(req)
+	if err != nil {
+		fmt.Println(err)
+		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
+		return
+	}
 
+	w.WriteHeader(http.StatusOK)
 }
