@@ -27,8 +27,8 @@ func main() {
 	r.HandleFunc("/robots/{name}/buddies", controllers.AddBuddy).Methods("PUT")
 	r.HandleFunc("/robots/{name}/buddies", controllers.RemoveBuddy).Methods("DELETE")
 
-	fmt.Println("Server started at port 8080")
-	log.Fatal(http.ListenAndServe(":8080", r))
+	fmt.Println("Server started at port 3000")
+	log.Fatal(http.ListenAndServe(":3000", r))
 
 	// TODO:
 	// r.Use(loggingMiddleware)

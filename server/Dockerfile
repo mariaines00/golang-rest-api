@@ -32,5 +32,7 @@ FROM scratch
 COPY --from=builder /dist/main /
 COPY --from=builder /build/templates ./templates
 
+EXPOSE 3000
+
 # Command to run
 ENTRYPOINT ["/main"]
