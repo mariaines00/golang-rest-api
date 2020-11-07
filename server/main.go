@@ -1,8 +1,12 @@
 package main
 
 import (
+	"context"
 	"log"
 	"net/http"
+	"os"
+	"os/signal"
+	"time"
 
 	"github.com/mariaines00/golang-rest-api/controllers"
 
@@ -11,6 +15,14 @@ import (
 
 func main() {
 	r := mux.NewRouter()
+
+	server := &http.Server{
+		Addr:         "0.0.0.0:3000",
+		WriteTimeout: time.Second * 15,
+		ReadTimeout:  time.Second * 15,
+		IdleTimeout:  time.Second * 60,
+		Handler:      r,
+	}
 
 	r.Use(loggingMiddleware)
 
@@ -28,11 +40,22 @@ func main() {
 	r.HandleFunc("/robots/{name}/buddies", controllers.AddBuddy).Methods("PUT")
 	r.HandleFunc("/robots/{name}/buddies", controllers.RemoveBuddy).Methods("DELETE")
 
-	log.Println("Server started at port 3000")
-	log.Fatal(http.ListenAndServe(":3000", r))
+	go func() {
+		log.Println("Server started at port 3000")
+		log.Fatal(server.ListenAndServe())
+	}()
 
-	// TODO:
-	// graceful shutdown
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt)
+	<-c
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
+	defer cancel()
+
+	server.Shutdown(ctx)
+
+	log.Println("see you later aligator")
+	os.Exit(0)
 }
 
 func index(w http.ResponseWriter, req *http.Request) {
