@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
@@ -12,6 +11,8 @@ import (
 
 func main() {
 	r := mux.NewRouter()
+
+	r.Use(loggingMiddleware)
 
 	r.HandleFunc("/", index)
 	r.HandleFunc("/hello", controllers.Hello)
@@ -27,14 +28,20 @@ func main() {
 	r.HandleFunc("/robots/{name}/buddies", controllers.AddBuddy).Methods("PUT")
 	r.HandleFunc("/robots/{name}/buddies", controllers.RemoveBuddy).Methods("DELETE")
 
-	fmt.Println("Server started at port 3000")
+	log.Println("Server started at port 3000")
 	log.Fatal(http.ListenAndServe(":3000", r))
 
 	// TODO:
-	// r.Use(loggingMiddleware)
 	// graceful shutdown
 }
 
 func index(w http.ResponseWriter, req *http.Request) {
 	http.Redirect(w, req, "/hello", http.StatusSeeOther)
+}
+
+func loggingMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+		log.Printf("%v %v %v", req.Method, req.Host, req.RequestURI)
+		next.ServeHTTP(w, req)
+	})
 }
