@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/mariaines00/golang-rest-api/models"
@@ -14,7 +14,7 @@ func AllBuddies(w http.ResponseWriter, req *http.Request) {
 
 	b, err := models.AllBuddies(req)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
 		return
 	}
@@ -27,7 +27,7 @@ func AllBuddies(w http.ResponseWriter, req *http.Request) {
 func AddBuddy(w http.ResponseWriter, req *http.Request) {
 	err := models.AddBuddy(req)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
 		return
 	}
@@ -39,7 +39,7 @@ func AddBuddy(w http.ResponseWriter, req *http.Request) {
 func RemoveBuddy(w http.ResponseWriter, req *http.Request) {
 	err := models.RemoveBuddy(req)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
 		return
 	}

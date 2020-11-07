@@ -3,7 +3,7 @@ package controllers
 import (
 	"database/sql"
 	"encoding/json"
-	"fmt"
+	"log"
 	"net/http"
 	"time"
 
@@ -22,7 +22,7 @@ func AllRobots(w http.ResponseWriter, req *http.Request) {
 
 	r, err := models.AllRobots()
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
 		return
 	}
@@ -55,7 +55,7 @@ func CreateRobot(w http.ResponseWriter, req *http.Request) {
 
 	r, err := models.CreateRobot(req)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		http.Error(w, http.StatusText(406), http.StatusNotAcceptable)
 		return
 	}
@@ -70,7 +70,7 @@ func UpdateRobot(w http.ResponseWriter, req *http.Request) {
 
 	r, err := models.UpdateRobot(req)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		http.Error(w, http.StatusText(406), http.StatusBadRequest)
 		return
 	}
@@ -85,7 +85,7 @@ func RemoveRobot(w http.ResponseWriter, req *http.Request) {
 
 	err := models.RemoveRobot(req)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		http.Error(w, http.StatusText(400), http.StatusBadRequest)
 		return
 	}

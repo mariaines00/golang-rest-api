@@ -2,7 +2,7 @@ package config
 
 import (
 	"database/sql"
-	"fmt"
+	"log"
 	"os"
 
 	_ "github.com/lib/pq"
@@ -13,7 +13,7 @@ var DB *sql.DB
 
 func init() {
 	var err error
-	dbURL := os.ExpandEnv("postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@database/$POSTGRES_DB?sslmode=disable")
+	dbURL := os.ExpandEnv("postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@localhost/$POSTGRES_DB?sslmode=disable")
 
 	DB, err = sql.Open("postgres", dbURL)
 
@@ -24,5 +24,5 @@ func init() {
 	if err = DB.Ping(); err != nil {
 		panic(err)
 	}
-	fmt.Println("You connected to your database.")
+	log.Println("Server connected to database")
 }
