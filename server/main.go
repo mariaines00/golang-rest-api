@@ -42,7 +42,9 @@ func main() {
 
 	go func() {
 		log.Println("Server started at port 3000")
-		log.Fatal(server.ListenAndServe())
+		if err := server.ListenAndServe(); err != nil {
+			log.Println(err)
+		}
 	}()
 
 	c := make(chan os.Signal, 1)
